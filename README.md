@@ -16,7 +16,17 @@ one is layered just above its own window, so they don't get in your way.
 make app
 ```
 
-Requires the Xcode Command Line Tools (`clang`). macOS 12+.
+Requires the Xcode Command Line Tools (`clang`). macOS 13+.
+
+## Install (use it every day)
+
+```sh
+make install
+```
+
+This builds the app and copies it to `/Applications`. Open it once, then click
+the ⬜ menu-bar icon and choose **Open at Login** so it starts automatically with
+every login — no Terminal needed after that.
 
 ## Run
 
@@ -38,6 +48,7 @@ From the menu bar icon:
 
 - **Borders On/Off** — toggle the outlines
 - **Reload Colors** — re-read your color config
+- **Open at Login** — start automatically when you log in
 - **Quit**
 
 ## Choosing your own colors (optional)

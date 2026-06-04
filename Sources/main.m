@@ -7,6 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <CoreGraphics/CoreGraphics.h>
+#import <ServiceManagement/ServiceManagement.h>
 
 static const CGFloat kLineWidth = 1.0;
 static const CGFloat kCornerRadius = 10.0;
@@ -93,10 +94,32 @@ static const NSTimeInterval kTick = 1.0 / 60.0; // 60 Hz
     NSMenu *menu = [[NSMenu alloc] init];
     [menu addItemWithTitle:@"Borders On/Off" action:@selector(toggle:) keyEquivalent:@""];
     [menu addItemWithTitle:@"Reload Colors" action:@selector(reloadColors:) keyEquivalent:@""];
+    NSMenuItem *login = [menu addItemWithTitle:@"Open at Login" action:@selector(toggleLogin:) keyEquivalent:@""];
+    login.state = [self loginEnabled] ? NSControlStateValueOn : NSControlStateValueOff;
     [menu addItem:[NSMenuItem separatorItem]];
     [menu addItemWithTitle:@"Quit" action:@selector(quit:) keyEquivalent:@"q"];
     for (NSMenuItem *item in menu.itemArray) item.target = self;
     self.statusItem.menu = menu;
+}
+
+- (BOOL)loginEnabled {
+    if (@available(macOS 13.0, *)) {
+        return SMAppService.mainAppService.status == SMAppServiceStatusEnabled;
+    }
+    return NO;
+}
+
+- (void)toggleLogin:(NSMenuItem *)sender {
+    if (@available(macOS 13.0, *)) {
+        NSError *err = nil;
+        if (self.loginEnabled) {
+            [SMAppService.mainAppService unregisterAndReturnError:&err];
+        } else {
+            [SMAppService.mainAppService registerAndReturnError:&err];
+        }
+        if (err) NSLog(@"login item error: %@", err);
+        sender.state = [self loginEnabled] ? NSControlStateValueOn : NSControlStateValueOff;
+    }
 }
 
 - (void)toggle:(id)sender {
