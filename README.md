@@ -1,5 +1,7 @@
 # window-border
 
+![window-border — each app gets its own outline color](assets/demo.png)
+
 A tiny macOS menu-bar app that draws a **colored outline around every window**,
 with **one stable color per app** — so when you have a dozen windows open you can
 tell at a glance which is which.
